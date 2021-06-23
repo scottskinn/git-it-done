@@ -1,5 +1,21 @@
+var repoNameE1 = document.querySelector("#repo-name");
 var issuesContainerE1 = document.querySelector("#issues-container");
 var limitWarningE1 = document.querySelector("#limit-warning");
+
+var getRepoName = function(){
+    var queryString = document.location.search;
+    var repoName = queryString.split("=")[1];
+    console.log(repoName);
+
+    if (repoName) {
+    // display repo name on the page
+    repoNameE1.textContent = repoName;
+    
+    getRepoIssues(repoName);
+    } else {
+        document.location.replace("./index.html");
+    }
+}
 
 var getRepoIssues = function(repo) {
     console.log(repo);
@@ -19,9 +35,11 @@ var getRepoIssues = function(repo) {
                 }
             });
         } else {
-            alert("There was a problem with your request");
+            // if not successful, redirect to the homepage
+            document.location.replace("./index.html");
         }
     })
+
 };
 
 var displayIssues = function(issues) {
@@ -74,7 +92,6 @@ var displayWarning = function(repo) {
     // append to warning container
     limitWarningE1.appendChild(linkEl);
 
-    displayWarning.appendChild(limitWarningE1);
 };
 
-getRepoIssues("facebook/react");
+getRepoName();

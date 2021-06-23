@@ -1,23 +1,3 @@
-var getUserRepos = function(user) {
-    // format the github api url
-    var apiUrl = "https://api.github.com/users/" + user + "/repos";
-
-    // make a request to the url
-    fetch(apiUrl).then(function(response) {
-        if (response.ok) {
-          response.json().then(function(data) {
-            displayRepos(data, user);
-          });
-        } else {
-          alert("Error: GitHub User Not Found");
-        }
-      })
-      .catch(function(error){
-          // Notice this `.catch()` getting chained onto the end of the `.then()` method
-          alert("Unable to connect to GitHub");
-      })
-}
-
 var userFormE1 = document.querySelector("#user-form");
 var nameInputE1 = document.querySelector("#username");
 var repoContainerE1 = document.querySelector("#repos-container");
@@ -38,8 +18,25 @@ var formSubmitHandler = function(event) {
     }
 };
 
+var getUserRepos = function(user) {
+    // format the github api url
+    var apiUrl = "https://api.github.com/users/" + user + "/repos";
 
-userFormE1.addEventListener("submit", formSubmitHandler);
+    // make a request to the url
+    fetch(apiUrl).then(function(response) {
+        if (response.ok) {
+          response.json().then(function(data) {
+            displayRepos(data, user);
+          });
+        } else {
+          alert("Error: GitHub User Not Found");
+        }
+      })
+      .catch(function(error){
+          // Notice this `.catch()` getting chained onto the end of the `.then()` method
+          alert("Unable to connect to GitHub");
+      })
+};
 
 
 var displayRepos = function(repos, searchTeam) {
@@ -54,15 +51,16 @@ var displayRepos = function(repos, searchTeam) {
     repoContainerE1.textContent = "";
     repoSearchTerm.textContent = searchTeam;
 
-
     // loop over repos
     for (var i = 0; i < repos.length; i++) {
         //format repo name
         var repoName = repos[i].owner.login + "/" + repos[i].name;
 
         //create a container for each repo
-        var repoE1 = document.createElement("div");
+        var repoE1 = document.createElement("a");
         repoE1.classList = "list-item flex-row justify-space-between align-center";
+        repoE1.setAttribute("href", "./single-repo.html?repo=" + repoName);
+
 
         //create a span element to hold repository name
         var titleE1 = document.createElement("span");
@@ -90,3 +88,6 @@ var displayRepos = function(repos, searchTeam) {
         repoContainerE1.appendChild(repoE1);
     }
 };
+
+
+userFormE1.addEventListener("submit", formSubmitHandler);
